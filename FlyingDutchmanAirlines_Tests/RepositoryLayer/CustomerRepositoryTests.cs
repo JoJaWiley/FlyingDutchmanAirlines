@@ -2,6 +2,7 @@ using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.Exceptions;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 
@@ -75,5 +76,20 @@ public class CustomerRepositoryTests
             await _repository.GetCustomerByName("Linus Torvalds");
         Assert.IsNotNull(customer);
     }
-    
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow(null)]
+    [DataRow("!")]
+    [DataRow("@")]
+    [DataRow("#")]
+    [DataRow("$")]
+    [DataRow("%")]
+    [DataRow("&")]
+    [DataRow("*")]
+    [ExpectedException(typeof(CustomerNotFoundException))]
+    public async Task GetCustomerByName_Failure_InvalidName(string name)
+    {
+        await _repository.GetCustomerByName(name);
+    }
 }
