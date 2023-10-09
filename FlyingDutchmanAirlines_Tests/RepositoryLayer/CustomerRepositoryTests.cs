@@ -13,12 +13,16 @@ public class CustomerRepositoryTests
     private CustomerRepository _repository;
 
     [TestInitialize]
-    public void TestInitialize()
+    public async Task TestInitialize()
     {
         DbContextOptions<FlyingDutchmanAirlinesContext> dbContextOptions = new
                 DbContextOptionsBuilder<FlyingDutchmanAirlinesContext>()
             .UseInMemoryDatabase("FlyingDutchman").Options;
         _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
+
+        Customer testCustomer = new Customer("Linux Torvalds");
+        _context.Customers.Add(testCustomer);
+        await _context.SaveChangesAsync();
 
         _repository = new CustomerRepository(_context);
         Assert.IsNotNull(_repository);
