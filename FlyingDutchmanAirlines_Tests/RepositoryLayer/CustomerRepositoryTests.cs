@@ -73,6 +73,7 @@ public class CustomerRepositoryTests
     {
         Customer customer =
             await _repository.GetCustomerByName("Linus Torvalds");
+        Assert.IsNotNull(customer);
     }
     
 }
