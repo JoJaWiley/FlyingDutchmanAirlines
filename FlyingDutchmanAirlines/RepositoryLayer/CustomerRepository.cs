@@ -1,5 +1,6 @@
 ﻿using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.Exceptions;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
@@ -38,6 +39,10 @@ public class CustomerRepository
 
     public async Task<Customer> GetCustomerByName(string name)
     {
+        if (IsInvalidCustomerName(name))
+        {
+            throw new CustomerNotFoundException();
+        }
         return new Customer(name);
     }
 
