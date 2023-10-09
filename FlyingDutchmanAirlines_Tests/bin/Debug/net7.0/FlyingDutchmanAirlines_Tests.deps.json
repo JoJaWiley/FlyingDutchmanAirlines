@@ -11,6 +11,7 @@
           "FlyingDutchmanAirlines": "1.0.0",
           "MSTest.TestAdapter": "2.2.10",
           "MSTest.TestFramework": "2.2.10",
+          "Microsoft.EntityFrameworkCore.InMemory": "7.0.11",
           "Microsoft.NET.Test.Sdk": "17.6.0",
           "coverlet.collector": "3.2.0",
           "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions": "14.0.0.0"
@@ -156,6 +157,17 @@
         }
       },
       "Microsoft.EntityFrameworkCore.Analyzers/7.0.11": {},
+      "Microsoft.EntityFrameworkCore.InMemory/7.0.11": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "7.0.11"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "assemblyVersion": "7.0.11.0",
+            "fileVersion": "7.0.1123.40906"
+          }
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational/7.0.11": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "7.0.11",
@@ -995,6 +1007,13 @@
       "sha512": "sha512-Qexum5safSSfijx6P1QSq5bVJPPTM/uf7lQmpL/shkiozEC/0FzqNaVUfFpbNN8zsO1jMFYbeDMF4cxJMlTT9w==",
       "path": "microsoft.entityframeworkcore.analyzers/7.0.11",
       "hashPath": "microsoft.entityframeworkcore.analyzers.7.0.11.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/7.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wc0YniYccjbzg8URydo3zbVUR0NLdvpIPU5qO0Vyvtl2Ty7fFmD6/RfbESjdcnszgiGt417OZiwmiiC+w3hmTA==",
+      "path": "microsoft.entityframeworkcore.inmemory/7.0.11",
+      "hashPath": "microsoft.entityframeworkcore.inmemory.7.0.11.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Relational/7.0.11": {
       "type": "package",
