@@ -20,7 +20,7 @@ public class CustomerRepositoryTests
             .UseInMemoryDatabase("FlyingDutchman").Options;
         _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
 
-        Customer testCustomer = new Customer("Linux Torvalds");
+        Customer testCustomer = new Customer("Linus Torvalds");
         _context.Customers.Add(testCustomer);
         await _context.SaveChangesAsync();
 
