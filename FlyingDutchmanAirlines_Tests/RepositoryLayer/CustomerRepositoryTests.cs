@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
 using FlyingDutchmanAirlines.DatabaseLayer;
@@ -79,6 +80,9 @@ public class CustomerRepositoryTests
         Customer customer =
             await _repository.GetCustomerByName("Linus Torvalds");
         Assert.IsNotNull(customer);
+
+        Customer dbCustomer = _context.Customers.First(); 
+        Assert.AreEqual(dbCustomer, customer);
     }
 
     [TestMethod]
@@ -95,5 +99,12 @@ public class CustomerRepositoryTests
     public async Task GetCustomerByName_Failure_InvalidName(string name)
     {
         await _repository.GetCustomerByName(name);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(CustomerNotFoundException))]
+    public async Task GetCustomerByName_Failure_NameNotFound()
+    {
+        await _repository.GetCustomerByName("Josh Wiley");
     }
 }
