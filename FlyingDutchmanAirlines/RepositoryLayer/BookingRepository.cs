@@ -1,4 +1,5 @@
 ﻿using FlyingDutchmanAirlines.DatabaseLayer;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
@@ -19,5 +20,11 @@ public class BookingRepository
                               $" = {customerID}, flightNumber = {flightNumber}");
             throw new ArgumentException("Invalid Arguments Provided");
         }
+
+        Booking newBooking = new Booking
+        {
+            CustomerId = customerID,
+            FlightNumber = flightNumber
+        };
     }
 }
