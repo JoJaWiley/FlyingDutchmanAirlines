@@ -14,6 +14,7 @@ public partial class FlyingDutchmanAirlinesContext : DbContext
     public FlyingDutchmanAirlinesContext(DbContextOptions<FlyingDutchmanAirlinesContext> options)
         : base(options)
     {
+        base.Database.EnsureDeleted();
     }
 
     public virtual DbSet<Airport> Airports { get; set; }

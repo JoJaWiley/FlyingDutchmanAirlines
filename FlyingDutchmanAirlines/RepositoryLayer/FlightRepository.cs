@@ -1,6 +1,7 @@
 ﻿using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
@@ -30,6 +31,8 @@ public class FlightRepository
                               $" flightNumber = {flightNumber}");
             throw new FlightNotFoundException();
         }
-        return new Flight();
+
+        return await _context.Flights.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber)
+               ?? throw new FlightNotFoundException();
     }
 }
