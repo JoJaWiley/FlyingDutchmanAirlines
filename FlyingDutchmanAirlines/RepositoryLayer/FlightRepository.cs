@@ -12,7 +12,8 @@ public class FlightRepository
         this._context = _context;
     }
 
-    public async Task<Flight> GetFlightByFlightNumber(int flightNumber)
+    public async Task<Flight> GetFlightByFlightNumber(int flightNumber, int originAirportId, 
+        int destinationAirportId)
     {
         return new Flight();
     }
