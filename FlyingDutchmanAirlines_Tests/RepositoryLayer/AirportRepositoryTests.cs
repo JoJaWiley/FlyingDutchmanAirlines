@@ -1,4 +1,5 @@
 ﻿using FlyingDutchmanAirlines.DatabaseLayer;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +21,12 @@ public class AirportRepositoryTests
         _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
         _repository = new AirportRepository(_context);
         Assert.IsNotNull(_repository);
+    }
+
+    [TestMethod]
+    public async Task GetAirportByID_Success()
+    {
+        Airport airport = await _repository.GetAirportByID(0);
+        Assert.IsNotNull(airport);
     }
 }
