@@ -1,4 +1,5 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer;
+﻿using FlyingDutchmanAirlines_Tests.Stubs;
+using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,24 @@ public class AirportRepositoryTests
     private AirportRepository _repository;
     
     [TestInitialize]
-    public void TestInitialize()
+    public async Task TestInitialize()
     {
         DbContextOptions<FlyingDutchmanAirlinesContext> dbContextOptions =
             new DbContextOptionsBuilder<FlyingDutchmanAirlinesContext>()
                 .UseInMemoryDatabase("FlyingDutchman").Options;
 
-        _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
+        _context = new FlyingDutchmanAirlinesContext_Stub(dbContextOptions);
+
+        Airport newAirport = new Airport
+        {
+            AirportId = 0,
+            City = "Nuuk",
+            Iata = "GOH"
+        };
+
+        _context.Airports.Add(newAirport);
+        await _context.SaveChangesAsync();
+        
         _repository = new AirportRepository(_context);
         Assert.IsNotNull(_repository);
     }
@@ -49,6 +61,10 @@ public class AirportRepositoryTests
     public async Task GetAirportByID_Success()
     {
         Airport airport = await _repository.GetAirportByID(0);
+        
         Assert.IsNotNull(airport);
+        Assert.AreEqual(0, airport.AirportId);
+        Assert.AreEqual("Nuuk", airport.City);
+        Assert.AreEqual("GOH", airport.Iata);
     }
 }

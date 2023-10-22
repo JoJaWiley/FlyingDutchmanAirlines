@@ -1,5 +1,7 @@
 ﻿using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
@@ -19,6 +21,7 @@ public class AirportRepository
             Console.WriteLine($"Argument Exception in GetAirportByID! AirportID = {airportID}");
             throw new ArgumentException("invalid argument provided");
         }
-        return new Airport();
+        return await _context.Airports.FirstOrDefaultAsync(a => a.AirportId == airportID)
+        ?? throw new AirportNotFoundException();
     }
 }
