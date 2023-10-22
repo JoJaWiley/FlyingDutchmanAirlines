@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace FlyingDutchmanAirlines_Tests.Stubs;
 
-public class FlyingDutchmanAirlinesContext_Stub : FlyingDutchmanAirlinesContext
+public class FlyingDutchmanAirlinesContext_Stub2 : FlyingDutchmanAirlinesContext
 {
-    public FlyingDutchmanAirlinesContext_Stub(DbContextOptions<FlyingDutchmanAirlinesContext> options)
+    public FlyingDutchmanAirlinesContext_Stub2(DbContextOptions<FlyingDutchmanAirlinesContext> options)
         : base(options)
     {
         base.Database.EnsureDeleted();
@@ -17,14 +17,14 @@ public class FlyingDutchmanAirlinesContext_Stub : FlyingDutchmanAirlinesContext
     {
         IEnumerable<EntityEntry> pendingChanges = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Added);
-        
-        IEnumerable<Booking> bookings = pendingChanges
-            .Select(e => e.Entity).OfType<Booking>();
-        if (bookings.Any(b => b.CustomerId != 1))
+
+        IEnumerable<Airport> airports = pendingChanges
+            .Select(e => e.Entity).OfType<Airport>();
+        if (!airports.Any())
         {
             throw new Exception("Database Error!");
         }
-        
+
         await base.SaveChangesAsync(cancellationToken);
         return 1;
     }
