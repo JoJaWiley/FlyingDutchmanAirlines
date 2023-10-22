@@ -1,5 +1,6 @@
 ﻿using FlyingDutchmanAirlines_Tests.Stubs;
 using FlyingDutchmanAirlines.DatabaseLayer;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
@@ -23,13 +24,7 @@ public class BookingRepositoryTests
         _repository = new BookingRepository(_context);
         Assert.IsNotNull(_repository);
     }
-
-    [TestMethod]
-    public void CreateBooking_Success()
-    {
-        
-    }
-
+    
     [TestMethod]
     [DataRow(-1, 0)]
     [DataRow(0, -1)]
@@ -45,5 +40,16 @@ public class BookingRepositoryTests
     public async Task CreateBooking_Failure_DatabaseError()
     {
         await _repository.CreateBooking(0, 1);
+    }
+    
+    [TestMethod]
+    public async Task CreateBooking_Success()
+    {
+        await _repository.CreateBooking(1, 0);
+        Booking booking = _context.Bookings.First();
+        
+        Assert.IsNotNull(booking);
+        Assert.AreEqual(1, booking.CustomerId);
+        Assert.AreEqual(0, booking.FlightNumber);
     }
 }
