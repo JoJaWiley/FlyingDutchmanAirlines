@@ -20,7 +20,7 @@ public class FlyingDutchmanAirlinesContext_Stub2 : FlyingDutchmanAirlinesContext
 
         IEnumerable<Airport> airports = pendingChanges
             .Select(e => e.Entity).OfType<Airport>();
-        if (!airports.Any())
+        if (airports.Any(a => a.AirportId == 10))
         {
             throw new Exception("Database Error!");
         }
