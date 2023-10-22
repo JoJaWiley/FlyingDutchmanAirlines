@@ -142,3 +142,5 @@ C:\Users\jojaw\FlyingDutchmanAirlinesNextGen\FlyingDutchmanAirlines_Tests\obj\De
 C:\Users\jojaw\FlyingDutchmanAirlinesNextGen\FlyingDutchmanAirlines_Tests\obj\Debug\net7.0\FlyingDutchmanAirlines_Tests.genruntimeconfig.cache
 C:\Users\jojaw\FlyingDutchmanAirlinesNextGen\FlyingDutchmanAirlines_Tests\obj\Debug\net7.0\ref\FlyingDutchmanAirlines_Tests.dll
 C:\Users\jojaw\FlyingDutchmanAirlinesNextGen\FlyingDutchmanAirlines_Tests\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\jojaw\FlyingDutchmanAirlinesNextGen\FlyingDutchmanAirlines_Tests\bin\Debug\net7.0\Castle.Core.dll
+C:\Users\jojaw\FlyingDutchmanAirlinesNextGen\FlyingDutchmanAirlines_Tests\bin\Debug\net7.0\Moq.dll

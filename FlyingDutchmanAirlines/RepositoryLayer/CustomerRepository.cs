@@ -1,4 +1,6 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,16 @@ public class CustomerRepository
     public CustomerRepository(FlyingDutchmanAirlinesContext _context)
     {
         this._context = _context;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public CustomerRepository()
+    {
+        if (Assembly.GetExecutingAssembly().FullName ==
+            Assembly.GetCallingAssembly().FullName)
+        {
+            throw new Exception("This constructor should only be used for testing");
+        }
     }
     
     public async Task<bool> CreateCustomer(string name)
@@ -38,7 +50,7 @@ public class CustomerRepository
         return true;
     }
 
-    public async Task<Customer> GetCustomerByName(string name)
+    public virtual async Task<Customer> GetCustomerByName(string name)
     {
         if (IsInvalidCustomerName(name))
         {
