@@ -14,6 +14,11 @@ public class AirportRepository
 
     public async Task<Airport> GetAirportByID(int airportID)
     {
+        if (airportID < 0)
+        {
+            Console.WriteLine($"Argument Exception in GetAirportByID! AirportID = {airportID}");
+            throw new ArgumentException("invalid argument provided");
+        }
         return new Airport();
     }
 }

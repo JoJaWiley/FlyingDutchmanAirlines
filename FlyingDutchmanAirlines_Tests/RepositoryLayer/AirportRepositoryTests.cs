@@ -24,6 +24,28 @@ public class AirportRepositoryTests
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public async Task GetAirportByID_Failure_InvalidInput()
+    {
+        StringWriter outputStream = new StringWriter();
+        try
+        {
+            Console.SetOut(outputStream);
+            await _repository.GetAirportByID(-1);
+        }
+        catch (ArgumentException)
+        {
+            Assert.IsTrue(outputStream.ToString().Contains("Argument Exception in GetAirportByID!" +
+                                                           " AirportID = -1"));
+            throw new ArgumentException();
+        }
+        finally
+        {
+            outputStream.Dispose();
+        }
+    }
+
+    [TestMethod]
     public async Task GetAirportByID_Success()
     {
         Airport airport = await _repository.GetAirportByID(0);
