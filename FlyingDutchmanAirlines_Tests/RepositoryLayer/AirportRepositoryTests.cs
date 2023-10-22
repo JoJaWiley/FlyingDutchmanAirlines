@@ -2,6 +2,7 @@
 using FlyingDutchmanAirlines_Tests.Stubs;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
 
@@ -89,6 +90,13 @@ public class AirportRepositoryTests
         {
             outputStream.Dispose();
         }
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(AirportNotFoundException))]
+    public async Task GetAirportByID_Failure_DatabaseException()
+    {
+        await _repository.GetAirportByID(10);
     }
 
     [TestMethod]
