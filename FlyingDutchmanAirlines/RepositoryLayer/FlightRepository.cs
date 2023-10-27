@@ -1,4 +1,6 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,16 @@ public class FlightRepository
     public FlightRepository(FlyingDutchmanAirlinesContext _context)
     {
         this._context = _context;
+    }
+    
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public FlightRepository()
+    {
+        if (Assembly.GetExecutingAssembly().FullName ==
+            Assembly.GetCallingAssembly().FullName)
+        {
+            throw new Exception("This constructor should only be used for testing");
+        }
     }
 
     public async Task<Flight> GetFlightByFlightNumber(int flightNumber, int originAirportId, 
