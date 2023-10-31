@@ -29,6 +29,10 @@ public class BookingService
             Customer customer;
             try
             {
+                if (!await FlightExistsInDatabase(flightNumber))
+                {
+                    throw new CouldNotAddBookingToDatabaseException();
+                }
                 customer =
                     await _customerRepository.GetCustomerByName(customerName);
             }
@@ -44,6 +48,19 @@ public class BookingService
         catch(Exception exception)
         {
             return (false, exception);
+        }
+    }
+
+    private async Task<bool> FlightExistsInDatabase(int flightNumber)
+    {
+        try
+        {
+            return await
+                _flightRepository.GetFlightByFlightNumber(flightNumber) != null;
+        }
+        catch (FlightNotFoundException)
+        {
+            return false;
         }
     }
 }
