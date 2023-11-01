@@ -44,6 +44,27 @@ public class BookingServiceTests
     }
 
     [TestMethod]
+    public async Task CreateCustomer_Success_CustomerNotInDatabase()
+    {
+        _mockBookingRepository.Setup(repository =>
+            repository.CreateBooking(0, 0)).Returns(Task.CompletedTask);
+        _mockCustomerRepository.Setup(repository =>
+                repository.GetCustomerByName("Konrad Zuse"))
+            .Throws(new CustomerNotFoundException());
+
+        BookingService service =
+            new BookingService(_mockBookingRepository.Object,
+                _mockFlightRepository.Object, _mockCustomerRepository.Object);
+
+        (bool result, Exception? exception) =
+            await service.CreateBooking("Konrad Zuse", 0);
+        
+        Assert.IsFalse(result);
+        Assert.IsNotNull(exception);
+        Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));
+    }
+
+    [TestMethod]
     [DataRow("", 0)]
     [DataRow(null, -1)]
     [DataRow("Galileo Galilei", -1)]
@@ -118,6 +139,30 @@ public class BookingServiceTests
             _mockFlightRepository.Object, _mockCustomerRepository.Object);
         (bool result, Exception? exception) =
             await service.CreateBooking("Maurits Escher", 19);
+        
+        Assert.IsFalse(result);
+        Assert.IsNotNull(exception);
+        Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));
+    }
+
+    public async Task CreateBooking_Failure_CustomerNotInDatabase_RepositoryFailure()
+    {
+        _mockBookingRepository.Setup(repository =>
+                repository.CreateBooking(0, 0))
+            .Throws(new CouldNotAddBookingToDatabaseException());
+        _mockFlightRepository.Setup(repository =>
+                repository.GetFlightByFlightNumber(0))
+            .ReturnsAsync(new Flight());
+        _mockCustomerRepository.Setup(repository =>
+                repository.GetCustomerByName("Bill Gates"))
+            .Returns(Task.FromResult(new Customer("Bill Gates")));
+
+        BookingService service =
+            new BookingService(_mockBookingRepository.Object,
+                _mockFlightRepository.Object, _mockCustomerRepository.Object);
+
+        (bool result, Exception? exception) =
+            await service.CreateBooking("Bill Gates", 0);
         
         Assert.IsFalse(result);
         Assert.IsNotNull(exception);
