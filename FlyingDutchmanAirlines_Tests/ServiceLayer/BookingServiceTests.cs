@@ -44,7 +44,7 @@ public class BookingServiceTests
     }
 
     [TestMethod]
-    public async Task CreateCustomer_Success_CustomerNotInDatabase()
+    public async Task CreateBooking_Success_CustomerNotInDatabase()
     {
         _mockBookingRepository.Setup(repository =>
             repository.CreateBooking(0, 0)).Returns(Task.CompletedTask);
@@ -61,7 +61,7 @@ public class BookingServiceTests
         
         Assert.IsFalse(result);
         Assert.IsNotNull(exception);
-        Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));
+        Assert.IsInstanceOfType(exception, typeof(CustomerNotFoundException));
     }
 
     [TestMethod]
