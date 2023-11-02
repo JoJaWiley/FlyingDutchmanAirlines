@@ -4,6 +4,7 @@ using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
@@ -37,5 +38,21 @@ public class FlightRepository
 
         return await _context.Flights.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber)
                ?? throw new FlightNotFoundException();
+    }
+
+    public virtual Queue<Flight> GetFlights()
+    {
+        Queue<Flight> flights = new Queue<Flight>();
+        foreach (Flight flight in _context.Flights)
+        {
+            flights.Enqueue(flight);
+        }
+
+        if (flights.IsNullOrEmpty())
+        {
+            throw new FlightNotFoundException();
+        }
+
+        return flights;
     }
 }
