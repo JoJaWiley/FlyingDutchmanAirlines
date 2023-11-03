@@ -1,6 +1,5 @@
-﻿
-
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
@@ -19,6 +18,20 @@ public class FlightServiceTests
     {
         _mockFlightRepository = new Mock<FlightRepository>();
         _mockAirportRepository = new Mock<AirportRepository>();
+        
+        Flight flightInDatabase = new Flight
+        {
+            FlightNumber = 148,
+            Origin = 31,
+            Destination = 92
+        };
+
+        Queue<Flight> mockReturn = new Queue<Flight>(1);
+        mockReturn.Enqueue(flightInDatabase);
+
+        _mockFlightRepository.Setup(repository =>
+            repository.GetFlights()).Returns(mockReturn);
+        
     }
 
     [TestMethod]
@@ -66,6 +79,40 @@ public class FlightServiceTests
             Assert.AreEqual(flightView.Origin.Code, "MEX");
             Assert.AreEqual(flightView.Destination.City, "Ulaanbaatar");
             Assert.AreEqual(flightView.Destination.Code, "UBN");
+        }
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(FlightNotFoundException))]
+    public async Task GetFlights_Failure_RepositoryException()
+    {
+        _mockAirportRepository.Setup(repository =>
+                repository.GetAirportByID(31))
+            .ThrowsAsync(new FlightNotFoundException());
+        
+        FlightService service = new FlightService(_mockFlightRepository.Object,
+            _mockAirportRepository.Object);
+        
+        await foreach (FlightView _ in service.GetFlights())
+        {
+            ;
+        }
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public async Task GetFlights_Failure_RegularException()
+    {
+        _mockAirportRepository.Setup(repository =>
+                repository.GetAirportByID(31))
+            .ThrowsAsync(new NullReferenceException());
+        
+        FlightService service = new FlightService(_mockFlightRepository.Object,
+            _mockAirportRepository.Object);
+        
+        await foreach (FlightView _ in service.GetFlights())
+        {
+            ;
         }
     }
 }

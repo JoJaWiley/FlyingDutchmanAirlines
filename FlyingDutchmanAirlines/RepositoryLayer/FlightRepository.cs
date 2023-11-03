@@ -48,10 +48,10 @@ public class FlightRepository
             flights.Enqueue(flight);
         }
 
-      //  if (flights.IsNullOrEmpty())
-     //   {
-      //      throw new FlightNotFoundException();
-     //   }
+        if (flights.IsNullOrEmpty())
+        {
+            throw new FlightNotFoundException();
+        }
 
         return flights;
     }
