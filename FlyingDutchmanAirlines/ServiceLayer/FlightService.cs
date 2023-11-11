@@ -16,7 +16,7 @@ public class FlightService
         _airportRepository = airportRepository;
     }
 
-    public async IAsyncEnumerable<FlightView> GetFlights()
+    public virtual async IAsyncEnumerable<FlightView> GetFlights()
     {
         Queue<Flight> flights = _flightRepository.GetFlights();
         foreach (Flight flight in flights)
@@ -43,6 +43,28 @@ public class FlightService
             yield return new FlightView(flight.FlightNumber.ToString(),
                     (originAirport.City, originAirport.Iata),
                     (destinationAirport.City, destinationAirport.Iata));
+        }
+    }
+
+    public virtual async Task<FlightView> GetFlightByFlightNumber(int flightNumber)
+    {
+        try
+        {
+            Flight flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
+            Airport originAirport = await _airportRepository.GetAirportByID(flight.Origin);
+            Airport destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+
+            return new FlightView(flight.FlightNumber.ToString(),
+                (originAirport.City, originAirport.Iata),
+                (destinationAirport.City, destinationAirport.Iata));
+        }
+        catch (FlightNotFoundException)
+        {
+            throw new FlightNotFoundException();
+        }
+        catch (Exception)
+        {
+            throw new ArgumentException();
         }
     }
 }
