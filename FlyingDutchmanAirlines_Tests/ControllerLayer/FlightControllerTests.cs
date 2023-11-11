@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using FlyingDutchmanAirlines.ControllerLayer;
+using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class FlightControllerTests
     public async Task GetFlights_Success()
     {
         Mock<FlightService> service = new Mock<FlightService>();
-
+        
         List<FlightView> returnFlightViews = new List<FlightView>(2)
         {
             new FlightView("1932",
@@ -46,5 +47,21 @@ public class FlightControllerTests
         {
             yield return flightView;
         }
+    }
+
+    [TestMethod]
+    public async Task GetFlights_Failure_FlightNotFoundException_404()
+    {
+        Mock<FlightService> service = new Mock<FlightService>();
+        
+        service.Setup(s => s.GetFlights())
+            .Throws(new FlightNotFoundException());
+
+        FlightController controller = new FlightController(service.Object);
+        ObjectResult? response = await controller.GetFlights() as ObjectResult;
+        
+        Assert.IsNotNull(response);
+        Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual("No flights were found in the database", response.Value);
     }
 }
