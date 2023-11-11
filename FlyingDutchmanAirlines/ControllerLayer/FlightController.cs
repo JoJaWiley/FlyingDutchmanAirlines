@@ -37,4 +37,22 @@ public class FlightController : Controller
                 "An error occurred");
         }
     }
+
+    public async Task<IActionResult> GetFlightByFlightNumber(int flightNumber)
+    {
+        try
+        {
+            FlightView flight = await _service.GetFlightByFlightNumber(flightNumber);
+            return StatusCode((int)HttpStatusCode.OK, flight);
+        }
+        catch (FlightNotFoundException)
+        {
+            return StatusCode((int)HttpStatusCode.NotFound,
+                "The flight was not found in the database");
+        }
+        catch (Exception)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError, "An error occurred");
+        }
+    }
 }
