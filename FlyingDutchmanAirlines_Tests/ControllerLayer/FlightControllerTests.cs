@@ -64,4 +64,44 @@ public class FlightControllerTests
         Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
         Assert.AreEqual("No flights were found in the database", response.Value);
     }
+
+    [TestMethod]
+    public async Task GetFlights_Failure_ArgumentException_500()
+    {
+        Mock<FlightService> service = new Mock<FlightService>();
+        service.Setup(s => s.GetFlights())
+            .Throws(new ArgumentException());
+
+        FlightController controller = new FlightController(service.Object);
+        ObjectResult? response = await controller.GetFlights() as ObjectResult;
+        
+        Assert.IsNotNull(response);
+        Assert.AreEqual((int)HttpStatusCode.InternalServerError, 
+            response.StatusCode);
+        Assert.AreEqual("An error occurred", response.Value);
+    }
+
+    [TestMethod]
+    public async Task GetFlightByFlightNumber_Success()
+    {
+        Mock<FlightService> service = new Mock<FlightService>();
+
+        FlightView returnedFlightView = new FlightView("0", ("Lagos", "LOS"),
+            ("Marrakesh", "RAK"));
+        service.Setup(s =>
+                s.GetFlightByFlightNumber(0))
+            .Returns(Task.FromResult(returnedFlightView));
+
+        FlightController controller = new FlightController(service.Object);
+
+        ObjectResult? response =
+            await controller.GetFlightByFlightNumber(0) as ObjectResult;
+        Assert.IsNotNull(response);
+        Assert.AreEqual((int)HttpStatusCode.OK, response.StatusCode);
+
+        FlightView? content = response.Value as FlightView;
+        Assert.IsNotNull(content);
+
+        Assert.AreEqual(returnedFlightView, content);
+    }
 }
