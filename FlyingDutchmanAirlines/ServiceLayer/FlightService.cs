@@ -1,4 +1,6 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.Views;
@@ -14,6 +16,16 @@ public class FlightService
     {
         _flightRepository = flightRepository;
         _airportRepository = airportRepository;
+    }
+    
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public FlightService()
+    {
+        if (Assembly.GetExecutingAssembly().FullName ==
+            Assembly.GetCallingAssembly().FullName)
+        {
+            throw new Exception("This constructor should only be used for testing");
+        }
     }
 
     public virtual async IAsyncEnumerable<FlightView> GetFlights()
