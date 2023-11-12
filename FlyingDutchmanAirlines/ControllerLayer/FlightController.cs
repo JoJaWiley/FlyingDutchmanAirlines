@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
+[Route("{controller}")]
 public class FlightController : Controller
 {
     private readonly FlightService _service;
@@ -14,6 +15,8 @@ public class FlightController : Controller
     {
         _service = service;
     }
+    
+    [HttpGet]
     public async Task<IActionResult> GetFlights()
     {
         try
@@ -37,7 +40,8 @@ public class FlightController : Controller
                 "An error occurred");
         }
     }
-
+    
+    [HttpGet("{flightNumber}")]
     public async Task<IActionResult> GetFlightByFlightNumber(int flightNumber)
     {
         try
