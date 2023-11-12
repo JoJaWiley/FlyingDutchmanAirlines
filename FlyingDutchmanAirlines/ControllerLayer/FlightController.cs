@@ -42,6 +42,11 @@ public class FlightController : Controller
     {
         try
         {
+            if (!flightNumber.IsPositive())
+            {
+                throw new Exception();
+            }
+            
             FlightView flight = await _service.GetFlightByFlightNumber(flightNumber);
             return StatusCode((int)HttpStatusCode.OK, flight);
         }
@@ -52,7 +57,7 @@ public class FlightController : Controller
         }
         catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, "An error occurred");
+            return StatusCode((int)HttpStatusCode.BadRequest, "Bad request");
         }
     }
 }
