@@ -121,4 +121,22 @@ public class FlightControllerTests
         Assert.AreEqual("The flight was not found in the database",
             response.Value);
     }
+
+    [TestMethod]
+    [DataRow(-1)]
+    [DataRow(1)]
+    public async Task GetFlightByFlightNumber_Failure_ArgumentException_400(int flightNumber)
+    {
+        Mock<FlightService> service = new Mock<FlightService>();
+        service.Setup(s => s.GetFlightByFlightNumber(1))
+            .Throws(new ArgumentException());
+
+        FlightController controller = new FlightController(service.Object);
+        ObjectResult? response =   
+            await controller.GetFlightByFlightNumber(flightNumber) as ObjectResult;
+        
+        Assert.IsNotNull(response);
+        Assert.AreEqual((int)HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.AreEqual("Bad request", response.Value);
+    }
 }
